@@ -1,0 +1,35 @@
+{
+	"name": "node-cache-layer",
+	"version": "0.0.1",
+	"description": "Extensible cache layer for express framework.",
+	"main": "dist/index",
+	"typings": "dist/index",
+	"scripts": {
+		"prepublishOnly": "npm run compile",
+		"compile": "tsc -p ."
+	},
+	"bugs": {
+		"url": "http://github.com/JSFromHell/node-cache-layer/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/JSFromHell/node-cache-layer.git"
+	},
+	"keywords": [
+		"cache",
+		"cache layer",
+		"node cache layer",
+		"nosql cache",
+		"express cache",
+		"response cache"
+	],
+	"author": "Carlos R. L. Rodrigues",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^8.0.0",
+		"typescript": "^2.6.1"
+	},
+	"files": [
+		"dist/*"
+	]
+}

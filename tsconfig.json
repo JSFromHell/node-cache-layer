@@ -1,0 +1,15 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2017",
+		"outDir": "./dist",
+		"moduleResolution": "node",
+		"declaration": true,
+		"watch": true
+	},
+	"include": [
+		"src/**/*.ts",
+		"index.ts"
+	]
+}
