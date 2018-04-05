@@ -2,6 +2,23 @@ import { config, updateConfig, loadHandler } from "./src/config"
 import { RouteCheck } from "./src/RouteCheck"
 
 export default (options: any = {}) => {
+	// TODO: options callbacks
+	/*
+	options = {
+		callbacks: {
+			before_serve(key: string, body: string, headers: any): void {
+
+			},
+			before_cache(route: any, cache: Buffer[], headers: any): void {
+
+			},
+			after_cache(route: any, body: Buffer, headers: any): void {
+
+			}
+		}
+	}
+	*/
+
 	updateConfig(options);
 
 	const module = loadHandler(config);
@@ -24,12 +41,9 @@ export default (options: any = {}) => {
 				return next();
 			}
 			else if (reply) {
-				// TESTTEEEEE
-				reply.header["x-cached"] = "1";
+				// TODO: callback before_serve
+
 				res.set(reply.header);
-
-				res.removeHeader("X-Powered-By");
-
 				return res.end(reply.content, reply.encoding);
 			}
 			else {
@@ -53,6 +67,7 @@ export default (options: any = {}) => {
 					}
 
 					// TESTEEEE
+					// TODO: callback before_cache
 					cache.push(Buffer.from("<hr /><b>cac<font color='red'>hed</font></b>", encoding));
 
 					const now = new Date();
@@ -78,6 +93,7 @@ export default (options: any = {}) => {
 						rawUrl,
 						expire
 					);
+					// TODO: callback after_cache
 					end.call(res);
 				};
 				return next();
