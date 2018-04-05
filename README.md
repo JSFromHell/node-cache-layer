@@ -100,15 +100,11 @@ It's a JSON named "**cache-config.json**".
 
 ### General properties
 Property | Description | Type | Example | Default Value
------------- | ------------- | ------------- | -------------
+------------ | ------------- | ------------- | ------------- | -------------
 prefix | If you want to prefix the record id/key to store. In case of databases with the concept of tables/collections, this will be used to name it. | string | `prefix: "cache_"` | cache_
-
 handler | The name of the module to handle the cache. | string | `handler: "cache-layer-redis"` | built-in memory (not recommended for production)
-
 status | Array containg all the status code that must be cached. This is valid for all the rules without the property status declared in itself. | number[] | `status: "[ 200, 401 ]"` | [ 200 ]
-
 expire | Time to live (in seconds) of the cached route. | number | `expire: 60` | 86400 (1 day)
-
 rules | Array containing all the rules to cache the routes. | object[] |  | []
 
 #### Rules properties
