@@ -1,7 +1,7 @@
 export class Handler {
 	private _cache = {};
 	constructor(public config: any = null) {
-
+		console.warn("WARNING: Built-in memory handler is not recommended for production environment.");
 	}
 
 	get(key: string, callback: Function) {

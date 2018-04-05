@@ -24,11 +24,11 @@ function loadConfigFile() {
 			);
 
 			// Convert Rules RegExp
-			for (let o in config.rules) {
-				let rule = config.rules[o];
+			for (const o in config.rules) {
+				const rule = config.rules[o];
 				if (rule.regex) {
 					try {
-						let reg = new RegExp(rule.regex, rule.ignore_case ? "i" : "");
+						const reg = new RegExp(rule.regex, rule.ignore_case ? "i" : "");
 						rule.regex = reg;
 					}
 					catch {
@@ -36,21 +36,27 @@ function loadConfigFile() {
 						delete config.rules[o];
 					}
 				}
-			}
 
-			// Sort Variables
-			for (let o of config.variables) {
-				for (let a of o) {
-					if(!Array.isArray(a)) {
-						a = [a];
+				// Sort Variables
+				for (const tp in rule.variables) {
+					let vars = rule.variables[tp];
+					if(!Array.isArray(vars)) {
+						vars = [vars];
 					}
-					a.sort();
+					vars.sort((x, y) => {
+						const xv = typeof(x) == "object" ? x.value : x;
+						const yv = typeof(y) == "object" ? y.value : y;
+						return xv > yv ? 1 : -1;
+					});
 				}
 			}
 		}
+		else {
+			console.warn(`WARNING: Config file could not be found at '${file}'.`);
+		}
 	}
 	catch (e) {
-
+		console.warn(`Unexpected ERROR while parsing the configuration file.`);
 	}
 }
 loadConfigFile();
