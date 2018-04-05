@@ -1,24 +1,8 @@
 import { config, updateConfig, loadHandler } from "./src/config"
 import { RouteCheck } from "./src/RouteCheck"
+import { ConfigParameters } from "./src/interface";
 
-export default (options: any = {}) => {
-	// TODO: options callbacks
-	/*
-	options = {
-		callbacks: {
-			before_serve(key: string, body: string, headers: any): void {
-
-			},
-			before_cache(route: any, cache: Buffer[], headers: any): void {
-
-			},
-			after_cache(route: any, body: Buffer, headers: any): void {
-
-			}
-		}
-	}
-	*/
-
+export default (options: ConfigParameters = {}) => {
 	updateConfig(options);
 
 	const module = loadHandler(config);
@@ -41,7 +25,9 @@ export default (options: any = {}) => {
 				return next();
 			}
 			else if (reply) {
-				// TODO: callback before_serve
+				if(config.callbacks && config.callbacks.before_serve) {
+					config.callbacks.before_serve(key, reply.content, reply.header, reply.encoding);
+				}
 
 				res.set(reply.header);
 				return res.end(reply.content, reply.encoding);
@@ -66,9 +52,11 @@ export default (options: any = {}) => {
 						return;
 					}
 
-					// TESTEEEE
-					// TODO: callback before_cache
-					cache.push(Buffer.from("<hr /><b>cac<font color='red'>hed</font></b>", encoding));
+
+					let originalHeaders = Object.assign({}, res._headers);
+					if(config.callbacks && config.callbacks.before_cache) {
+						config.callbacks.before_cache(route, cache, originalHeaders, encoding);
+					}
 
 					const now = new Date();
 					let dateExpire = new Date();
@@ -78,11 +66,11 @@ export default (options: any = {}) => {
 					const buf = Buffer.concat(cache);
 
 					const headers = route.mergeHeaders(
-						res._headers,
+						originalHeaders,
 						{
 							"Content-Length": buf.length,
 							"Last-Modified": now.toUTCString(),
-							"Cache-Control": "max-age=" + (dateExpire.getTime() / 1000)
+							"Cache-Control": "max-age=" + (dateExpire.getTime() / 1000 >> 0)
 						}
 					);
 					
@@ -92,8 +80,11 @@ export default (options: any = {}) => {
 						headers,
 						rawUrl,
 						expire
-					);
-					// TODO: callback after_cache
+					, (key) => {
+						if(config.callbacks && config.callbacks.after_cache) {
+							config.callbacks.after_cache(key, route, buf, headers, encoding);
+						}
+					});
 					end.call(res);
 				};
 				return next();

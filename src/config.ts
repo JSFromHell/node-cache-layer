@@ -1,9 +1,10 @@
+import { ConfigParameters } from "./interface";
 import * as path from "path";
 import * as fs from "fs"
 
 export let config: any = {}
 
-export function updateConfig(options: any) {
+export function updateConfig(options: ConfigParameters) {
 	this.config = Object.assign(this.config, options);
 }
 

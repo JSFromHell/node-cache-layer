@@ -16,7 +16,7 @@ export class Handler {
 
 		return callback(null, null);
 	}
-	set(key: string, content: Buffer, header: any, rawUrl: string, expire: number = null) {
+	set(key: string, content: Buffer, header: any, rawUrl: string, expire: number = null, callback?: Function) {
 		if (this.config.prefix) {
 			key = this.config.prefix + "_" + key;
 		}
@@ -30,6 +30,8 @@ export class Handler {
 			rawUrl,
 			expire
 		}
+
+		callback && callback(key);
 	}
 
 	del(key: string) {
