@@ -2,15 +2,15 @@
 
 Cache layer compatible with express framework. 
 
-### Install
+## Install
 
-##### First step:
+#### First step:
 Install the main package:
 ```
 npm install node-cache-layer --save
 ```
 
-##### Second step:
+#### Second step:
 Install the handler desired to store the cache:
 
 **Redis**:
@@ -29,7 +29,7 @@ npm install cache-layer-filesystem --save
 ```
 
 
-### Using
+## Usage
 
 Seamless integration without any major change in your application.
 It caches the entire body response and the headers as well.
@@ -48,7 +48,7 @@ Complete options:
 app.use(
 	cache({
 		config_file: "./path/config.json", // If you prefer not to use the default location
-		isCacheable(req: any) { // Custom function to define if the response can be cached
+		isCacheable(req: any) { // Custom function to define whether the response can be cached
 			if(req.query.is_preview == "1")
 				return false;
 			
@@ -58,7 +58,7 @@ app.use(
 );
 ```
 
-#### Config File
+### Config File
 
 The default config file is located at the application root.
 It's a JSON named "**cache-config.json**".
@@ -98,7 +98,7 @@ It's a JSON named "**cache-config.json**".
 }
 ```
 
-#### General properties
+### General properties
 Property | Description | Type | Example | Default Value
 ------------ | ------------- | ------------- | -------------
 prefix | If you want to prefix the record id/key to store. In case of databases with the concept of tables/collections, this will be used to name it. | string | `prefix: "cache_"` | cache_
