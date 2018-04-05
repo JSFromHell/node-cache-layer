@@ -5,6 +5,7 @@ import * as url from "url"
 export class RouteCheck {
 	private _key: string;
 	private _expire: number;
+	private _status: number[];
 	private _url: string;
 	private _original: string;
 
@@ -111,6 +112,7 @@ export class RouteCheck {
 		this._url = this.getNormalizedKey();
 		this._key = group + hash(this._url);
 		this._expire = rule.expire;
+		this._status = rule.status || null;
 	}
 
 	get isCacheable(): boolean {
@@ -123,6 +125,10 @@ export class RouteCheck {
 
 	get expire(): number {
 		return this._expire;
+	}
+
+	get status(): number[] {
+		return this._status;
 	}
 
 	get normalizedKey(): string {

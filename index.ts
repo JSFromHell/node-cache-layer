@@ -17,6 +17,7 @@ export default (options: any = {}) => {
 		const cache = [];
 		const key = route.key;
 		const expire = route.expire;
+		const status = route.status || config.status;
 
 		cacheControl.get(key, (error, reply) => {
 			if (error) {
@@ -45,7 +46,8 @@ export default (options: any = {}) => {
 					if (chunk)
 						this.write(chunk, encoding);
 
-					if(!~config.status.indexOf(res.statusCode)){
+					
+					if(!~status.indexOf(res.statusCode)){
 						end.call(res);
 						return;
 					}

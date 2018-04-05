@@ -21,7 +21,7 @@ export class Handler {
 			key = this.config.prefix + "_" + key;
 		}
 
-		expire = expire || this.config.default_expire || 8640;
+		expire = expire || this.config.expire || 8640;
 		expire = expire * 1e3 + +new Date;
 
 		this._cache[key] = {
