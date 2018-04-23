@@ -4,6 +4,7 @@ export declare interface ConfigCallbacks {
 	after_cache?(key: string, route: any, body: Buffer, headers: any, encoding?: string): void;
 }
 export declare interface ConfigParameters {
+	config_file?: string;
 	handler?: string;
 	isCacheable?(req: any): boolean;
 	callbacks?: ConfigCallbacks;

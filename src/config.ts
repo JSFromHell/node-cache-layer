@@ -15,9 +15,9 @@ export function loadHandler(config: any) {
 	return require("./handler/InMemory");
 }
 
-function loadConfigFile() {
+export function loadConfigFile(customPath?: string) {
 	try {
-		const file = path.join(process.cwd(), "cache-config.json");
+		const file = path.join(process.cwd(), customPath || "cache-config.json");
 
 		if (fs.existsSync(file)) {
 			config = JSON.parse(
@@ -60,4 +60,3 @@ function loadConfigFile() {
 		console.warn(`Unexpected ERROR while parsing the configuration file.`);
 	}
 }
-loadConfigFile();

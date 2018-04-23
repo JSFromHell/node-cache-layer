@@ -1,8 +1,9 @@
-import { config, updateConfig, loadHandler } from "./src/config"
+import { config, loadConfigFile, updateConfig, loadHandler } from "./src/config"
 import { RouteCheck } from "./src/RouteCheck"
 import { ConfigParameters } from "./src/interface";
 
 export default (options: ConfigParameters = {}) => {
+	loadConfigFile(options.config_file);
 	updateConfig(options);
 
 	const module = loadHandler(config);
