@@ -16,6 +16,7 @@ export default (options: ConfigParameters = {}) => {
 
 		const end = res.end;
 		const write = res.write;
+		const writeHeader = res.writeHeader;
 		const cache = [];
 		const key = route.key;
 		const expire = route.expire;
@@ -30,7 +31,8 @@ export default (options: ConfigParameters = {}) => {
 					config.callbacks.before_serve(key, reply.content, reply.header, reply.encoding);
 				}
 
-				res.set(reply.header);
+				writeHeader.call(res, 200, reply.header);
+				write.call(res, reply.content, reply.encoding);
 				return res.end(reply.content, reply.encoding);
 			}
 			else {
@@ -54,9 +56,16 @@ export default (options: ConfigParameters = {}) => {
 					}
 
 
-					let originalHeaders = Object.assign({}, res._headers);
+					let headers = {};
+					const originalHeaders = res._header.split("\r\n");
+					for(const h of originalHeaders) {
+						if(h.includes(":")) {
+							const val = h.split(":");
+							headers[val[0].toLowerCase()] = val[1].trim();
+						}
+					}
 					if(config.callbacks && config.callbacks.before_cache) {
-						config.callbacks.before_cache(route, cache, originalHeaders, encoding);
+						config.callbacks.before_cache(route, cache, headers, encoding);
 					}
 
 					const now = new Date();
@@ -66,14 +75,9 @@ export default (options: ConfigParameters = {}) => {
 					const rawUrl = req.originalUrl;
 					const buf = Buffer.concat(cache);
 
-					const headers = route.mergeHeaders(
-						originalHeaders,
-						{
-							"Content-Length": buf.length,
-							"Last-Modified": now.toUTCString(),
-							"Cache-Control": "max-age=" + (dateExpire.getTime() / 1000 >> 0)
-						}
-					);
+					headers["content-length"] = buf.length;
+					headers["last-modified"] = now.toUTCString();
+					headers["cache-control"] = "max-age=" + (dateExpire.getTime() / 1000 >> 0);
 					
 					cacheControl.set(
 						key,
